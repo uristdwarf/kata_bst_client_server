@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <array>
+#include <tuple>
 using namespace std;
 
-string parse_hostname(int argc, char **argv);
+tuple<string, int> parse_hostname(int argc, char **argv);
