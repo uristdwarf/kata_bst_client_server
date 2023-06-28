@@ -6,7 +6,7 @@ TEST(ClientTests, ParseSimpleHost) {
 	char *argv[] = {(char*)"client", ip_address.data()};
 	// Default port will be 5510
 	int port = 5510;
-	int argc = sizeof(argv);
+	int argc = sizeof(argv)/sizeof(argv[0]);
 	
 	auto [host, port_int] = parse_hostname(argc, argv);
 	EXPECT_EQ(host, ip_address);
@@ -17,7 +17,7 @@ TEST(ClientTests, ParseHostWithPort) {
 	string ip_address = "127.0.0.1:1234";
 	int port = 1234;
 	char *argv[] = {(char*)"client", ip_address.data()};
-	int argc = sizeof(argv);
+	int argc = sizeof(argv)/sizeof(argv[0]);
 	
 	auto [host, port_int] = parse_hostname(argc, argv);
 	EXPECT_EQ(host, ip_address);
@@ -28,7 +28,7 @@ TEST(ClientTests, ParseHostAndPort) {
 	string ip_address = "127.0.0.1";
 	string port = "6789";
 	char *argv[] = {(char*)"client", ip_address.data(), port.data()};
-	int argc = sizeof(argv);
+	int argc = sizeof(argv)/sizeof(argv[0]);
 	
 	auto [host, port_int] = parse_hostname(argc, argv);
 	EXPECT_EQ(host, ip_address);
