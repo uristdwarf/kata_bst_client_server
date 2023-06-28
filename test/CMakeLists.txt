@@ -2,13 +2,16 @@ cmake_minimum_required(VERSION 3.14)
 enable_testing()
 
 add_executable(
-  hello_test
-  hello_test.cc
+  tests
+  client_test.cpp
 )
 target_link_libraries(
-  hello_test
+  tests
   GTest::gtest_main
+  client_lib
 )
 
+# target_link_libraries(test gtest gtest_main client_lib)
+
 include(GoogleTest)
-gtest_discover_tests(hello_test)
+gtest_discover_tests(tests)
