@@ -30,3 +30,5 @@ boost library.
 * Visualize the binary tree in a GUI or image. Should be an interesting
   challenge.
 * Speaking of GUI's, maybe make one for the client (perhaps in the terminal?)
+* Write binary tree to disk everytime changes happen, and when starting up read
+  from disk.
