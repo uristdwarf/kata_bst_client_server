@@ -10,6 +10,7 @@ int main(int argc, char *argv[]) {
 		printf("%s", USAGE);
 		return 1;
 	}
+	parse_hostname(argc, argv);
 	printf("Hello World!\n");
 	return 0;
 }
