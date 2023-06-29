@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 
 set(SOURCE_FILES
 	client_utils.cpp
+	server.cpp
 )
 
 add_library(client_lib STATIC ${SOURCE_FILES})

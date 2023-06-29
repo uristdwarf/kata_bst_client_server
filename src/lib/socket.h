@@ -8,10 +8,12 @@ using namespace std;
 // and the server/client are responsible for actually connecting
 // and listening/writing
 class connection {
+	struct addrinfo *info;
+
+	protected:
 	// File descriptor
 	int fd;
 	// Information about remote peer;
-	struct addrinfo *info;
 
 	public:
 	// Create connection on own host
