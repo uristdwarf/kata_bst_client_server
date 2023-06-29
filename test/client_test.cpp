@@ -34,3 +34,7 @@ TEST(ClientTests, ParseHostAndPort) {
 	EXPECT_EQ(host, ip_address);
 	EXPECT_EQ(port_int, stoi(port));
 }
+
+// We can do tests for parse_hostname all day, but for right now let's just finish up the client shall we?
+// TODO: Add test with invalid port
+
