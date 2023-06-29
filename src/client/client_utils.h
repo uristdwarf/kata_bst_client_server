@@ -4,4 +4,4 @@
 #include <tuple>
 using namespace std;
 
-tuple<string, int> parse_hostname(int argc, char **argv);
+tuple<string, string> parse_hostname(int argc, char **argv);

@@ -5,9 +5,9 @@
 #include <stdexcept>
 #include <stdlib.h>
 
-tuple<string, int> parse_hostname(int argc, char **argv) {
+tuple<string, string> parse_hostname(int argc, char **argv) {
 	string hostname = argv[1];
-	int port;
+	string port;
 	string delimiter = ":";
 	size_t pos = hostname.find(delimiter);
 
@@ -15,12 +15,12 @@ tuple<string, int> parse_hostname(int argc, char **argv) {
 		if (argc == 2) {
 			// Default port to use
 			// TODO: Add a #define for this
-			port = 5510;
+			port = "5510";
 		} else {
-			port = stoi(argv[2]);
+			port = argv[2];
 		}
 	} else {
-		port = stoi(hostname.substr(pos + delimiter.length()));
+		port = hostname.substr(pos + delimiter.length());
 	}
 
 	return {hostname, port};
