@@ -9,12 +9,10 @@ TEST(LibTest, CreateRemoteSocket) {
 	connection conn(ip, port);
 
 	auto info = conn.get_info();
-	auto fd = conn.get_fd();
 	
-	char ip_result[INET_ADDRSTRLEN];
+	struct sockaddr_in *info_addr = (struct sockaddr_in*)info.ai_addr;
 
-	inet_ntop(AF_INET, info.ai_addr->sa_data, ip_result, INET_ADDRSTRLEN);
+	auto ip_result = inet_ntoa(info_addr->sin_addr);
 	EXPECT_EQ(ip_result, ip);
-	EXPECT_GT(fd, 0);
 }
 

@@ -19,7 +19,6 @@ class connection {
 	// Create connection on remote host
 	connection(string address, string port);
 
-	int get_fd();
 	addrinfo get_info();
 
 	~connection();
