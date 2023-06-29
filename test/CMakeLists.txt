@@ -4,11 +4,13 @@ enable_testing()
 add_executable(
   tests
   client_test.cpp
+  lib_test.cpp
 )
 target_link_libraries(
   tests
   GTest::gtest_main
   client_lib
+  lib
 )
 
 # target_link_libraries(test gtest gtest_main client_lib)
