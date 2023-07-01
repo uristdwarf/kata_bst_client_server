@@ -4,10 +4,11 @@
 
 #define DATA_SIZE 1000
 
-class server : connection {
+class client : connection {
 	char buffer[DATA_SIZE];
 	public:
-	server(string address, string port);
+	client(string address, string port);
+	~client();
 	void send(string message);
 	string recv();
 	// An idea for multi threading: If we wanted the client to do something

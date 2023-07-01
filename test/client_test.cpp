@@ -2,7 +2,7 @@
 #include <cstdio>
 #include <gtest/gtest.h>
 #include "../src/client/client_utils.h"
-#include "../src/client/server.h"
+#include "../src/client/client.h"
 
 TEST(ClientTests, ParseSimpleHost) {
 	string ip_address = "127.0.0.1";
@@ -46,19 +46,19 @@ TEST(ClientTests, ReadFromNetCat) {
 	const size_t BUFFER_SIZE = sizeof("Hello!");
 	char buffer[BUFFER_SIZE];
 	auto stream = popen("nc -lv 5510", "r");
-	server srv("127.0.0.1", "5510");
+	client server("127.0.0.1", "5510");
 
-	srv.send(message);
+	server.send(message);
 	fread(buffer, 1, sizeof(buffer), stream);	
 	EXPECT_EQ(buffer, message);
 }
 
 TEST(ClientTests, WriteFromNetCat) {	
 	auto stream = popen("nc -lv 5510", "w");
-	server srv("127.0.0.1", "5510");
+	client server("127.0.0.1", "5510");
 	string message = "Hello!";
 	
 	fwrite(message.data(), sizeof(message[0]), message.length(), stream);
-	string res = srv.recv();
+	string res = server.recv();
 	ASSERT_EQ(res, message);
 }
