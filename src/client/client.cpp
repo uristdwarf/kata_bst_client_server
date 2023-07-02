@@ -24,7 +24,7 @@ void client::send(string message) {
 	int sent = ::send(fd, message.data(), message.length(), 0);
 	// printf("client: %s", message.data());
 	if (sent == -1) {
-		// TODO: Handle server side closures
+		perror("send");
 		throw send_err();
 	} else if (sent != 0) {
 		send(message.substr(sent));
