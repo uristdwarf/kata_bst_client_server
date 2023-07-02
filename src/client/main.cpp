@@ -41,14 +41,14 @@ int main(int argc, char *argv[]) {
 			}
 			server.send(command);
 			string msg = server.recv();
-			cout << "remote: " << msg << endl;
+			cout << "remote: " << msg;
 		}
 	} catch (connection_err& e) {
 		cout << e.what() << endl;
 		return 2;
 	} catch (client_err& e) {
 		cout << "failed communicating with server: " << e.what() << endl;
-
+		return 3;
 	}
 	return 0;
 }
