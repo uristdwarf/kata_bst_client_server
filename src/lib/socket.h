@@ -7,11 +7,20 @@
 
 using namespace std;
 
-class socket_error : exception {
+class socket_error : public exception {
+	public:
 	virtual const char* what() {
 		return "failed to open socket";
 	}
 };
+
+class addresses_exhausted : public exception {
+	public:
+	virtual const char* what() {
+		return "no more addresses available";
+	}
+};
+
 // Represents a socket connection. No connection is actually made
 // and the server/client are responsible for actually connecting
 // and listening/writing

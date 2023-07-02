@@ -55,7 +55,7 @@ struct addrinfo connection::get_info() {
 struct addrinfo connection::next_addr() {
 	info = info->ai_next;
 	if (info == NULL) {
-		throw runtime_error("no more addrinfo available");
+		throw addresses_exhausted();
 	}
 	close(fd);
 	if ((fd = socket(info->ai_family, info->ai_socktype, info->ai_protocol)) == -1) {
