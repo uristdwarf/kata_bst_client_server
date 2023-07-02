@@ -5,20 +5,34 @@
 
 #define DATA_SIZE 1000
 
-class send_err : public exception {
-	virtual const char * what() {
+class client_err : public exception {
+
+};
+
+class send_err : public client_err {
+	public:
+	const char * what() const noexcept {
 		return "failed sending data";
 	}
 };
 
-class connection_closed : public exception {
-	virtual const char * what() {
+class connection_closed : public client_err {
+	public:
+	const char * what() const noexcept {
 		return "remote has closed connection";
 	}
 };
 
-class recv_err : public exception {
-	virtual const char * what() {
+class connection_err : public client_err {
+	public:
+	const char * what() const noexcept {
+		return "could not connect to server";
+	}
+};
+
+class recv_err : public client_err {
+	public:
+	const char * what() const noexcept {
 		return "remote has closed connection";
 	}
 };

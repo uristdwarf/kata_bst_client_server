@@ -10,6 +10,9 @@ client::client(string ip_address, string port) : connection(ip_address, port) {
 		try {
 			next_addr();
 		} catch (socket_error) {} // socket might not work on this address
+		catch (addresses_exhausted e) {
+			throw connection_err();
+		}
 	}
 }
 
