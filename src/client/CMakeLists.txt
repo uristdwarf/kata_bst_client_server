@@ -8,5 +8,5 @@ set(SOURCE_FILES
 add_library(client_lib STATIC ${SOURCE_FILES})
 add_executable(client main.cpp)
 
-target_link_libraries(client client_lib)
+target_link_libraries(client client_lib lib)
 

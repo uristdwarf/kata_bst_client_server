@@ -1,5 +1,10 @@
 #include <cstring>
+#include <exception>
+#include <iostream>
 #include <stdio.h>
+#include <memory>
+#include "client.h"
+#include <signal.h>
 #include "client_utils.h"
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -19,67 +24,31 @@ int main(int argc, char *argv[]) {
 		printf("%s", USAGE);
 		return 1;
 	}
-	auto [address, port] = parse_hostname(argc, argv);
-
-	struct addrinfo hints, *result, *result_port;
-	memset(&hints, 0, sizeof(hints));
-	// TODO: Add IPV6 support
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_flags = AI_PASSIVE;
-
-	int status;
-	if ((status = getaddrinfo(address.data(), port.data(), &hints,	&result) != 0)) {
-		fprintf(stderr, "getaddrinfo error: %s\n", gai_strerror(status));
-		return 254;
-	}
-
-	int socket_fd;
-	for (result_port = result; result_port != NULL; result_port = result_port->ai_next) {
-		if (
-		   (socket_fd = socket(
-		   	result_port->ai_family,
-		   	result_port->ai_socktype,
-		   	result_port->ai_protocol)
-		   ) == -1)
-		{
-			perror("client: socket");
-			continue;
+	// Ignore sigpipe errors
+	signal(SIGPIPE, SIG_IGN);
+	try {
+		auto [address, port] = parse_hostname(argc, argv);
+		client server = client(address, port);
+		cout << "Connected to " << address << " on port " << port << endl;
+		cout << "Welcome! Please enter 'help' to see available commands (NOT YET IMPLEMENTED)" << endl;
+		cout << "Enter 'exit' to quit" << endl;
+		while (1) {
+			cout << "> ";
+			string command = "";
+			cin >> command;
+			if (command == "exit") {
+				break;
+			}
+			server.send(command);
+			string msg = server.recv();
+			cout << "remote: " << msg << endl;
 		}
-		if (connect(socket_fd, result_port->ai_addr, result_port->ai_addrlen) == -1) {
-			close(socket_fd);
-			perror("client: connect");
-			continue;
-		}
+	} catch (connection_err& e) {
+		cout << e.what() << endl;
+		return 2;
+	} catch (client_err& e) {
+		cout << "failed communicating with server: " << e.what() << endl;
 
-		break;
 	}
-
-	if (result_port == NULL) {
-		fprintf(stderr, "client: failed to connect\n");
-		return 3;
-	}
-	
-	const char *message = "Ping\n";
-	size_t length = strlen(message);
-	char buffer[DATA_SIZE];
-
-	while (1) {
-		int sent = send(socket_fd, message, length, 0);
-		printf("client: %s", message);
-		if (sent == -1) {
-			// TODO: Handle server side closures
-			perror("send");
-			break;
-		} else if (sent != 0) {
-			// TODO: Handle large messages
-		}
-		int received = recv(socket_fd, &buffer, DATA_SIZE, 0);
-		printf("server: %s", buffer);
-	}
-	
-
-	freeaddrinfo(result);
-	close(socket_fd);
 	return 0;
 }
