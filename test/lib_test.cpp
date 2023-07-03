@@ -1,4 +1,7 @@
 #include <arpa/inet.h>
+#include <cstdlib>
+#include <ctime>
+#include <exception>
 #include <gtest/gtest.h>
 #include <sys/socket.h>
 #include "../src/lib/socket.h"
@@ -19,24 +22,24 @@ TEST(SocketTests, CreateRemoteSocket) {
 
 class BinarySearchTreeTests : public ::testing::Test {
 	protected:
-	shared_ptr<bst> tree;
+	bst *tree;
 
 	void SetUp() override {
-		tree = make_shared<bst>();
+		tree = new bst;
 		tree->key = 6;
 
-		tree->left.reset(new bst);
+		tree->left = new bst;
 		tree->left->parent = tree;
-		tree->left->left.reset(new bst);
+		tree->left->left = new bst;
 		tree->left->left->parent = tree->left;
-		tree->left->right.reset(new bst);
+		tree->left->right = new bst;
 		tree->left->right->parent = tree->left;
 
-		tree->right.reset(new bst);
+		tree->right = new bst;
 		tree->right->parent = tree;
-		tree->right->right.reset(new bst);
+		tree->right->right = new bst;
 		tree->right->right->parent = tree->right;
-		tree->right->left.reset(new bst);
+		tree->right->left = new bst;
 		tree->right->left->parent = tree->right;
 
 		tree->left->key = 3;
@@ -78,8 +81,9 @@ TEST_F(BinarySearchTreeTests, DeleteKey) {
 	ASSERT_EQ(tree->left->key, 5);
 
 	key = 20;
-	tree->right->right->right.reset(new bst);
+	tree->right->right->right = new bst;
 	tree->right->right->right->key = 20;
+	tree->right->right->right->parent = tree->right->right;
 	tree->del(9);
 	ASSERT_TRUE(tree->right);
 	ASSERT_EQ(tree->right->key, 15);
@@ -108,4 +112,21 @@ TEST(BinarySearchTreeIntegrationTest, InsertFindDelete) {
 	EXPECT_THROW({tree->del(10);}, bst_exception);
 	ASSERT_EQ(tree->key, 15);
 	EXPECT_THROW({tree->del(15);}, last_node);
+}
+
+TEST(BinarySearchTreeIntegrationTest, BigInsertFindDelete) {
+	srand(time(NULL));
+	int rand_val = rand() % 100 + 1;
+	set<int> values({rand_val});
+	auto tree = make_shared<bst>(rand_val);
+	for (int i = 0; i < 99; i++) {
+		while (values.contains(rand_val)) {
+			rand_val = rand() % 100 + 1;
+		}
+		tree->insert(rand_val);
+		values.insert(rand_val);
+	}
+	for (const int &v : values) {
+		EXPECT_TRUE(tree->find(v)) << "value of " << v << " not found in tree";
+	}
 }
