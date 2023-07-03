@@ -115,9 +115,11 @@ TEST(BinarySearchTreeIntegrationTest, InsertFindDelete) {
 }
 
 TEST(BinarySearchTreeIntegrationTest, BigInsertFindDelete) {
+	// Testing random values from 1 to 100
 	srand(time(NULL));
 	int rand_val = rand() % 100 + 1;
 	set<int> values({rand_val});
+	// Insertion
 	auto tree = make_shared<bst>(rand_val);
 	for (int i = 0; i < 99; i++) {
 		while (values.contains(rand_val)) {
@@ -126,7 +128,14 @@ TEST(BinarySearchTreeIntegrationTest, BigInsertFindDelete) {
 		tree->insert(rand_val);
 		values.insert(rand_val);
 	}
+	// Find
 	for (const int &v : values) {
 		EXPECT_TRUE(tree->find(v)) << "value of " << v << " not found in tree";
 	}
+	// Delete
+	for (const int &v : values) {
+		tree->del(v);
+		EXPECT_FALSE(tree->find(v)) << "value of " << v << " still found in tree";
+	}
+
 }
