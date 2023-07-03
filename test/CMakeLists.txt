@@ -5,11 +5,13 @@ add_executable(
   tests
   client_test.cpp
   lib_test.cpp
+  server_test.cpp
 )
 target_link_libraries(
   tests
   GTest::gtest_main
   client_lib
+  server_lib
   lib
 )
 
