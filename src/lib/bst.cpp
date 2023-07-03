@@ -25,7 +25,7 @@ void bst::insert(int key) {
 		previous_node = node;
 		if (node->key == key)
 			throw bst_exception("key already exists");
-		if (node->right != NULL && node->key > key)
+		if (node->key > key)
 			node = node->left;
 		else
 			node = node->right;
