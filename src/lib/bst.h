@@ -11,11 +11,11 @@ class last_node : public std::exception {
 
 };
 
-struct bst : public std::enable_shared_from_this<bst> {
+struct bst {
 	int key;
-	std::shared_ptr<bst> left;
-	std::shared_ptr<bst> right;
-	std::shared_ptr<bst> parent;
+	bst *left = NULL;
+	bst *right = NULL;
+	bst *parent = NULL;
 	bst() {};
 	bst(int number);
 	bool find(int key);
