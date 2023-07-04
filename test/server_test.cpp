@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "../src/server/server.h"
+#include <atomic>
 #include <cstdio>
 #include <netdb.h>
 #include <sys/socket.h>
@@ -34,6 +35,8 @@ class ServerConnectionTests : public ::testing::Test {
     struct addrinfo hints, *servinfo;
     int fd;
     server serv = server("5510");
+    atomic_bool server_run = true;
+    thread server_listen;
 
     void SetUp() override {
 	signal(SIGPIPE, SIG_IGN); // Prevent SIGPIPE
@@ -50,7 +53,9 @@ class ServerConnectionTests : public ::testing::Test {
 	    perror("client: socket");
 	    exit(254);
 	}
+	server_listen = thread([this] {serv.listen(server_run);});
     };
+
     void connect() {
 	if (::connect(fd, servinfo->ai_addr, servinfo->ai_addrlen) == -1) {
 	    perror("client: connect");
@@ -74,6 +79,8 @@ class ServerConnectionTests : public ::testing::Test {
 	close(fd);
     }
     void TearDown() override {
+	server_run = false;
+	server_listen.join();
 	freeaddrinfo(servinfo);
     };
 };
